@@ -81,7 +81,7 @@ def _explain(values: dict | None, patient_id: int | None) -> dict:
         raise HTTPException(422, str(e)) from e
 
 
-@app.get("/api/health")
+@app.api_route("/api/health", methods=["GET", "HEAD"])  # HEAD for uptime monitors
 def health():
     s = svc()
     return {"status": "ok", "version": __version__, "model": s.model.meta.get("version"),

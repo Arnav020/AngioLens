@@ -1,0 +1,12 @@
+# One-click deploy on Render's free tier: https://render.com/deploy?repo=https://github.com/Arnav020/AngioLens
+services:
+  - type: web
+    name: angiolens
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /api/health
+    autoDeploy: true
+    envVars:
+      - key: GROQ_API_KEY   # optional: enables the LLM copilot and voice questions
+        sync: false

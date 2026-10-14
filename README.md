@@ -75,7 +75,7 @@ Open **http://127.0.0.1:8000** (it opens automatically). Optional: copy `.env.ex
 [Groq API key](https://console.groq.com/keys) to enable the LLM copilot and voice questions. Without it, everything else
 works and the copilot uses a deterministic template.
 
-**Free hosting:** see [`docs/DEPLOY.md`](docs/DEPLOY.md) (Hugging Face Spaces, Docker, free CPU tier).
+**Free hosting:** one-click deploy on Render's free tier: [`docs/DEPLOY.md`](docs/DEPLOY.md) · [Deploy to Render](https://render.com/deploy?repo=https://github.com/Arnav020/AngioLens)
 
 **Docker:**
 
