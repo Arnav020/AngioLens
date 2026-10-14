@@ -9,6 +9,7 @@ Multimodal AI Hackathon 2026 · Track A: Cardiovascular Risk Visualization & Pre
 > CT coronary angiography or clinical judgement.
 
 - 📄 **Technical report (5 pages):** [`docs/AngioLens_Technical_Report.pdf`](docs/AngioLens_Technical_Report.pdf)
+- 🌐 **Live demo:** https://angiolens.onrender.com/ (free tier: the first load after idle can take about a minute)
 - 🎬 **Demo video (6 min):** https://youtu.be/R_DU726G0Zs
 - 🧪 **Validation:** 10×5 repeated nested cross-validation · 20 automated tests
 
@@ -75,7 +76,7 @@ Open **http://127.0.0.1:8000** (it opens automatically). Optional: copy `.env.ex
 [Groq API key](https://console.groq.com/keys) to enable the LLM copilot and voice questions. Without it, everything else
 works and the copilot uses a deterministic template.
 
-**Free hosting:** one-click deploy on Render's free tier: [`docs/DEPLOY.md`](docs/DEPLOY.md) · [Deploy to Render](https://render.com/deploy?repo=https://github.com/Arnav020/AngioLens)
+**Free hosting:** live at https://angiolens.onrender.com/ · one-click deploy on Render's free tier: [`docs/DEPLOY.md`](docs/DEPLOY.md) · [Deploy to Render](https://render.com/deploy?repo=https://github.com/Arnav020/AngioLens)
 
 **Docker:**
 
