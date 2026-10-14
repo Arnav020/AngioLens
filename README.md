@@ -1,7 +1,7 @@
 # AngioLens · a virtual angiogram
 
 **Coronary artery disease and per-vessel stenosis prediction, explained exactly with SHAP and mapped onto a real 3D heart.**
-Multimodal AI Hackathon 2026 · Track A: Cardiovascular Risk Visualization & Prediction · Team **Random Forest Rangers**
+Multimodal AI Hackathon 2026 · Track A: Cardiovascular Risk Visualization & Prediction · Team **Random Forest Rangers** (Arnav Joshi)
 
 ![AngioLens dashboard](docs/img/dashboard.png)
 
@@ -9,7 +9,7 @@ Multimodal AI Hackathon 2026 · Track A: Cardiovascular Risk Visualization & Pre
 > CT coronary angiography or clinical judgement.
 
 - 📄 **Technical report (5 pages):** [`docs/AngioLens_Technical_Report.pdf`](docs/AngioLens_Technical_Report.pdf)
-- 🎬 **Demo video:** _add YouTube link here_
+- 🎬 **Demo video (6 min):** https://youtu.be/R_DU726G0Zs
 - 🧪 **Validation:** 10×5 repeated nested cross-validation · 20 automated tests
 
 ---
@@ -63,7 +63,7 @@ P(vessel) > P(CAD) in about 21 % of patients. Full tables, ROC, calibration and 
 the trained model, the 3D asset and the built web app ship in the repository.
 
 ```bash
-git clone <this-repo-url> AngioLens
+git clone https://github.com/Arnav020/AngioLens.git
 cd AngioLens
 python -m venv .venv
 # Windows: .venv\Scripts\activate    macOS/Linux: source .venv/bin/activate
@@ -75,11 +75,13 @@ Open **http://127.0.0.1:8000** (it opens automatically). Optional: copy `.env.ex
 [Groq API key](https://console.groq.com/keys) to enable the LLM copilot and voice questions. Without it, everything else
 works and the copilot uses a deterministic template.
 
+**Free hosting:** see [`docs/DEPLOY.md`](docs/DEPLOY.md) (Hugging Face Spaces, Docker, free CPU tier).
+
 **Docker:**
 
 ```bash
 docker build -t angiolens .
-docker run -p 8000:8000 angiolens          # add  --env-file .env  for the copilot
+docker run -p 8000:7860 angiolens          # open http://127.0.0.1:8000 · add --env-file .env for the copilot
 ```
 
 ## Reproduce everything from scratch
@@ -177,4 +179,4 @@ patients, because LDL is no higher in CAD patients, many of whom are on statins)
 
 ## Team
 
-**Random Forest Rangers** (solo entry): `YOUR FULL NAME`
+**Random Forest Rangers** (solo entry): **Arnav Joshi**

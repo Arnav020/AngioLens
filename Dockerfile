@@ -18,5 +18,9 @@ COPY models/ models/
 COPY data/raw/ data/raw/
 COPY run.py .
 COPY --from=web /web/dist web/dist
-EXPOSE 8000
-CMD ["python", "run.py", "--host", "0.0.0.0", "--port", "8000", "--no-browser"]
+# Hugging Face Spaces expects 7860; Render/Koyeb/Railway inject $PORT.
+ENV PORT=7860
+EXPOSE 7860
+RUN useradd -m -u 1000 app && chown -R app /app
+USER app
+CMD ["sh", "-c", "python run.py --host 0.0.0.0 --port ${PORT} --no-browser"]
