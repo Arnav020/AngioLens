@@ -1,0 +1,14 @@
+[project]
+name = "angiolens"
+version = "1.0.0"
+description = "Virtual angiogram: CAD and per-vessel stenosis prediction with exact SHAP explanations on a 3D heart"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]
+filterwarnings = ["ignore::UserWarning", "ignore::DeprecationWarning", "ignore::FutureWarning"]
+
+[tool.ruff]
+line-length = 120

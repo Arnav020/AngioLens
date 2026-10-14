@@ -1,0 +1,49 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="slides.css">
+<style>
+.wrap { position: absolute; left: 120px; right: 120px; top: 90px; }
+h2 { font: italic 400 84px/1 "Serif"; margin: 14px 0 50px; }
+.row { display: flex; align-items: stretch; gap: 0; }
+.box { flex: 1; border: 1px solid #24353d; border-radius: 16px; padding: 22px 24px; background: rgba(10,17,20,.85); min-height: 190px; }
+.box b { display: block; font: 600 26px "Plex"; margin-bottom: 10px; }
+.box span { font: 400 20px/1.45 "Plex"; color: var(--ink2); }
+.box.hl { border-color: var(--amber); box-shadow: 0 0 40px rgba(233,162,59,.12) inset; }
+.box .k { font: 500 15px "PlexMono"; letter-spacing: .16em; color: var(--ink3); text-transform: uppercase; display: block; margin-bottom: 8px; }
+.arr { width: 56px; display: flex; align-items: center; justify-content: center; color: var(--ink3); font-size: 34px; }
+.row2 { margin-top: 30px; }
+.stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 22px; margin-top: 60px; }
+.stat { border-top: 1px solid #24353d; padding-top: 16px; }
+.stat .n { font: 500 56px/1 "PlexMono"; color: var(--ink); }
+.stat .n em { font-style: normal; color: var(--amber); }
+.stat .l { font: 400 20px "Plex"; color: var(--ink2); margin-top: 8px; }
+</style></head>
+<body>
+<div class="wrap">
+  <div class="eyebrow fade d1">Under the hood</div>
+  <h2 class="fade d1">One registry, one model, one heart.</h2>
+  <div class="row">
+    <div class="box fade d2"><span class="k">data</span><b>Feature registry</b><span>55 inputs declared once: units, ranges, reference values. Leakage guard on LAD / LCX / RCA / Cath.</span></div>
+    <div class="arr fade d3">→</div>
+    <div class="box hl fade d3"><span class="k">stage 1</span><b>P(CAD)</b><span>L1 logistic ⊕ LightGBM in log-odds, Platt-calibrated</span></div>
+    <div class="arr fade d4">→</div>
+    <div class="box hl fade d4"><span class="k">stage 2</span><b>P(vessel | CAD)</b><span>same blend per artery, trained on diseased patients</span></div>
+    <div class="arr fade d5">→</div>
+    <div class="box fade d5"><span class="k">guarantees</span><b>Exact SHAP · conformal</b><span>P(v) = P(CAD)·P(v|CAD) ≤ P(CAD); 90% prediction sets</span></div>
+  </div>
+  <div class="row row2">
+    <div class="box fade d6"><span class="k">anatomy</span><b>BodyParts3D → GLB</b><span>FMA-selected coronary trees, epicardial offset, baked flow + territory</span></div>
+    <div class="arr fade d7">→</div>
+    <div class="box fade d7"><span class="k">backend</span><b>FastAPI</b><span>predict · cohort replay · sensitivity · encode · copilot · PDF</span></div>
+    <div class="arr fade d8">→</div>
+    <div class="box fade d8"><span class="k">frontend</span><b>React Three Fiber</b><span>custom GLSL flow + halo shaders, no post-processing</span></div>
+    <div class="arr fade d9">→</div>
+    <div class="box fade d9"><span class="k">language</span><b>Grounded copilot</b><span>Groq LLM + Whisper; every number verified</span></div>
+  </div>
+  <div class="stats">
+    <div class="stat fade d10"><div class="n"><em>41</em> ms</div><div class="l">per prediction with exact SHAP for 4 stages</div></div>
+    <div class="stat fade d10"><div class="n"><em>60</em> fps</div><div class="l">1080p on Intel Iris Xe integrated graphics</div></div>
+    <div class="stat fade d11"><div class="n"><em>10×5</em></div><div class="l">repeated nested cross-validation, deterministic</div></div>
+    <div class="stat fade d11"><div class="n"><em>20</em> tests</div><div class="l">leakage · additivity · coherence · API · grounding</div></div>
+  </div>
+</div>
+</body></html>

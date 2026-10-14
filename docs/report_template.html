@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>AngioLens: Technical Report</title>
+<style>
+@font-face { font-family: "Plex"; src: url("fonts/ibm-plex-sans-latin-400-normal.woff2"); font-weight: 400; }
+@font-face { font-family: "Plex"; src: url("fonts/ibm-plex-sans-latin-500-normal.woff2"); font-weight: 500; }
+@font-face { font-family: "Plex"; src: url("fonts/ibm-plex-sans-latin-600-normal.woff2"); font-weight: 600 700; }
+@font-face { font-family: "PlexMono"; src: url("fonts/ibm-plex-mono-latin-400-normal.woff2"); font-weight: 400; }
+@font-face { font-family: "PlexMono"; src: url("fonts/ibm-plex-mono-latin-500-normal.woff2"); font-weight: 500 700; }
+@font-face { font-family: "Serif"; src: url("fonts/instrument-serif-latin-400-normal.woff2"); font-style: normal; }
+@font-face { font-family: "Serif"; src: url("fonts/instrument-serif-latin-400-italic.woff2"); font-style: italic; }
+:root { --ink:#151b21; --muted:#5e6873; --line:#dde1e6; --accent:#c2410c; --soft:#f6f4f1; }
+* { box-sizing: border-box; }
+body { font: 9.1pt/1.42 "Plex", "Segoe UI", Arial, sans-serif; color: var(--ink); margin: 0; }
+h1 { font: italic 400 30pt/1 "Serif", Georgia, serif; margin: 0 0 3pt; letter-spacing: .01em; }
+h1 em { font-style: normal; color: var(--accent); }
+h2 { font: 600 11.5pt/1.2 "Plex"; margin: 11pt 0 4pt; padding-top: 4pt; border-top: 1px solid var(--line); }
+h2 .n { color: var(--accent); font-family: "PlexMono"; margin-right: 6pt; }
+h3 { font: 600 9.4pt "Plex"; margin: 7pt 0 2pt; }
+p { margin: 0 0 5pt; }
+ul { margin: 0 0 5pt; padding-left: 13pt; }
+li { margin: 1pt 0; }
+.sub { color: var(--muted); font-size: 9pt; margin-bottom: 8pt; }
+.mono, code { font-family: "PlexMono", Consolas, monospace; font-size: .92em; }
+code { background: #f1f2f4; padding: 0 3px; border-radius: 3px; }
+.abstract { background: var(--soft); border-left: 3px solid var(--accent); padding: 7pt 10pt; margin: 6pt 0 8pt; }
+.kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6pt; margin: 6pt 0; }
+.kpi { border: 1px solid var(--line); border-radius: 6px; padding: 5pt 7pt; }
+.kpi .v { font: 500 17pt/1.05 "PlexMono"; }
+.kpi .l { font: 500 7pt "PlexMono"; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.kpi .c { font: 7.5pt "PlexMono"; color: var(--muted); }
+figure { margin: 5pt 0 7pt; }
+figure img { width: 100%; display: block; border-radius: 4px; }
+figcaption { font-size: 7.8pt; color: var(--muted); margin-top: 2pt; }
+table { border-collapse: collapse; width: 100%; font-size: 8pt; margin: 3pt 0 6pt; }
+th { font: 500 6.9pt "PlexMono"; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); text-align: left; border-bottom: 1px solid #c9ced4; padding: 3pt 4pt; }
+td { border-bottom: 1px solid var(--line); padding: 2.6pt 4pt; vertical-align: top; }
+td.best { color: var(--accent); font-weight: 600; }
+.ci { color: var(--muted); font-size: 7.2pt; font-family: "PlexMono"; }
+.two { display: grid; grid-template-columns: 1fr 1fr; gap: 12pt; }
+.note { font-size: 7.8pt; color: var(--muted); }
+.pipe { display: flex; align-items: stretch; gap: 0; margin: 6pt 0 4pt; font-size: 7.6pt; }
+.pipe .b { border: 1px solid #c9ced4; border-radius: 5px; padding: 4pt 6pt; background: #fff; flex: 1; }
+.pipe .b b { display: block; font-size: 8pt; }
+.pipe .b.hl { border-color: var(--accent); background: #fff7f2; }
+.pipe .ar { display: flex; align-items: center; padding: 0 4pt; color: var(--muted); }
+.eq { font-family: "PlexMono"; font-size: 8.2pt; background: #f6f7f8; border-radius: 4px; padding: 4pt 7pt; margin: 4pt 0; }
+.pb { break-before: page; }
+.warn { border: 1px solid #f2c08a; background: #fff6ea; border-radius: 5px; padding: 5pt 8pt; color: #7c2d12; font-size: 8.3pt; }
+.refs li { font-size: 7.6pt; color: #333; }
+</style>
+</head>
+<body>
+
+<h1>Angio<em>Lens</em> · a virtual angiogram</h1>
+<div class="sub">Coronary artery disease and per-vessel stenosis prediction, exactly explained and mapped onto a 3D heart ·
+<b>Random Forest Rangers</b> · Multimodal AI Hackathon 2026 · Track A: Cardiovascular Risk Visualization &amp; Prediction</div>
+
+<div class="abstract">
+<b>Problem.</b> Invasive angiography tells a cardiologist <i>where</i> coronary disease is. Routine clinical data
+(history, ECG, labs, echo) arrives earlier and costs far less, but statistical risk scores turn it into a single opaque number.
+<b>What we built.</b> AngioLens predicts overall CAD and ≥50 % stenosis of the LAD, LCX and RCA from {{NF}} routine features of the
+Z-Alizadeh Sani cohort (n = {{N}}). It explains every prediction <i>exactly</i> with SHAP and renders it as a "virtual angiogram": a
+real BodyParts3D heart whose arteries carry animated contrast flow coloured by risk, and whose myocardium shows the territory each
+artery supplies. <b>Key ideas:</b> (1) a <i>hierarchical</i> model P(vessel) = P(CAD)·P(vessel | CAD) that is anatomically coherent
+by construction; (2) an affine log-odds ensemble that keeps SHAP exactly additive after calibration; (3) conformal prediction
+that says "indeterminate" instead of guessing; (4) honest out-of-fold replay of all {{N}} patients; (5) an LLM copilot whose every
+number is machine-checked against the model output. <b>Results</b> (10×5 repeated nested CV): ROC-AUC
+CAD {{AUC_CAD}} (95 % CI {{CI_CAD}}), LAD {{AUC_LAD}}, LCX {{AUC_LCX}}, RCA {{AUC_RCA}}; Brier {{BRIER_CAD}} for CAD; 90 % conformal coverage
+held on every target; 60 fps on integrated graphics; 41 ms per explained prediction.
+</div>
+
+<figure><img src="img/dashboard.png"><figcaption><b>Figure 1.</b> The AngioLens dashboard on cohort patient #99 (single-vessel LAD disease), replayed by the
+cross-validation model that never saw this patient. Left: cohort browser (out-of-fold risk, angiography truth rings). Centre: BodyParts3D heart
+inside an x-ray torso; arteries coloured by stenosis probability, myocardium tinted by territory at risk, ECG strip at the recorded heart rate.
+Right: CAD gauge with conformal status, per-vessel cards with ground truth, AHA 17-segment map.</figcaption></figure>
+
+<h2><span class="n">1</span>What the system does</h2>
+<ul>
+<li><b>Predict</b> overall CAD and LAD / LCX / RCA stenosis with calibrated probabilities, an operating flag, a model range and a 90 % conformal set.</li>
+<li><b>Map</b> each probability onto its artery in 3D (colour, contrast-flow speed, glow) and onto the myocardium it perfuses (3D territory tint + AHA bull's-eye). Rotate, zoom, pick an artery or any point on the heart muscle to inspect it.</li>
+<li><b>Explain</b> with exact SHAP waterfalls in two stages ("is there CAD?" and "where is it?"), clinical-domain totals, and a physiological breakdown of every measurement against its reference range.</li>
+<li><b>Probe</b> with counterfactual what-ifs and per-patient sensitivity curves; compare with the five most similar real patients and their angiograms.</li>
+<li><b>Communicate</b> via a grounded copilot (clinician / patient voice, English / Hindi, voice questions) and a one-page PDF report.</li>
+</ul>
+
+<h2><span class="n">2</span>Data &amp; preprocessing</h2>
+<div class="two">
+<div>
+<p><b>Dataset.</b> Extension of Z-Alizadeh Sani (UCI #411, CC BY 4.0): {{N}} patients who underwent angiography, 55 raw clinical columns
+plus targets <code>LAD</code>, <code>LCX</code>, <code>RCA</code> and <code>Cath</code>. Prevalence: CAD {{PREV_CAD}}, LAD {{PREV_LAD}},
+LCX {{PREV_LCX}}, RCA {{PREV_RCA}}. Diseased vessels per patient: 0 → {{V0}}, 1 → {{V1}}, 2 → {{V2}}, 3 → {{V3}}.</p>
+<p><b>Leakage guard.</b> The four target columns are excluded from the feature registry and the build fails if any reaches the model
+(asserted in code and in the test suite).</p>
+<p><b>Audit findings.</b> No missing values. <code>Exertional CP</code> is constant (all "N") and dropped. One record has
+<code>Cath = Normal</code> although a vessel is stenotic; it is kept unchanged and reported, not silently fixed.</p>
+</div>
+<div>
+<p><b>Encoding.</b> A single <i>feature registry</i> (<code>angiolens/schema.py</code>) declares each of the {{NF}} model inputs once: raw column, clinical
+domain (demographic, symptom/exam, ECG, lab, echo), unit, valid range, adult reference range and whether it is modifiable. Y/N → 0/1; sex →
+binary; bundle-branch block → LBBB/RBBB indicators; valvular disease → ordinal 0–3. Training, API validation, the web form and the
+physiological breakdown are all generated from this registry, so a new clinical feature is a one-line change.</p>
+<p><b>Transforms</b> (fitted inside every training fold only): log1p on right-skewed labs (FBS, creatinine, TG, BUN, ESR, WBC, platelets),
+then standardisation for the linear branch. Trees use raw values.</p>
+</div>
+</div>
+
+<h2><span class="n">3</span>Model architecture</h2>
+<div class="pipe">
+<div class="b"><b>55 clinical inputs</b>demographics · symptoms · ECG · labs · echo</div><div class="ar">→</div>
+<div class="b hl"><b>Stage 1 · P(CAD)</b>L1-LR ⊕ LightGBM blended in log-odds, Platt-calibrated</div><div class="ar">→</div>
+<div class="b hl"><b>Stage 2 · P(v | CAD)</b>same blend, trained on CAD+ patients, one per artery</div><div class="ar">→</div>
+<div class="b"><b>P(v) = P(CAD)·P(v | CAD)</b>coherent by construction</div><div class="ar">→</div>
+<div class="b"><b>Conformal sets + thresholds</b>positive / negative / indeterminate</div>
+</div>
+<p><b>Hierarchical targets.</b> CAD is defined as ≥50 % narrowing in <i>any</i> vessel, so we factorise
+P(vessel) = P(CAD)·P(vessel | CAD). Stage 2 learns only the localisation question among diseased patients. A vessel probability
+can never exceed the CAD probability. Independent per-vessel models violate this in {{COH_DIRECT}} of out-of-fold predictions,
+which would show a heart with a "70 % LAD" next to a "40 % CAD".</p>
+<p><b>Exactly explainable calibrated ensemble.</b> Each stage combines a sparse L1 logistic regression and a shallow LightGBM (500 trees,
+8 leaves, strong subsampling) in log-odds space and then applies Platt scaling:</p>
+<div class="eq">z(x) = a · ( w · z<sub>LR</sub>(x) + (1 − w) · z<sub>GBM</sub>(x) ) + b &nbsp;&nbsp;⇒&nbsp;&nbsp; φ<sub>j</sub>(x) = a · ( w · φ<sup>LR</sup><sub>j</sub>(x) + (1 − w) · φ<sup>TreeSHAP</sup><sub>j</sub>(x) )</div>
+<p>Every step is affine in log-odds, so SHAP values remain <b>exactly additive</b> (base + Σφ = calibrated logit to 10<sup>−6</sup>, unit-tested)
+while the model keeps the accuracy of the blend. C ∈ {0.05, 0.1, 0.2, 0.4}, w ∈ {0, .25, .5, .75, 1} and (a, b) are chosen by inner 5-fold CV
+on log-loss. Deployed choices: <span class="mono">{{STAGES}}</span>.</p>
+<p><b>Uncertainty.</b> Mondrian (class-conditional) conformal prediction at α = 0.10 turns each probability into a prediction set. "Both
+outcomes" is shown as <i>indeterminate</i>. The calibrated LR-vs-GBM spread is shown as a model range. Operating thresholds maximise Youden's J
+on inner out-of-fold predictions ({{THR}}).</p>
+
+<h2><span class="n">4</span>Validation methodology &amp; predictive performance</h2>
+<p>10×5 <b>repeated, stratified, nested</b> cross-validation (strata = CAD × number of diseased vessels). Hyper-parameters, calibration,
+thresholds and conformal quantiles are fitted inside each outer training split, so no outer-test patient ever influences a modelling
+decision. 95 % CIs combine patient bootstrap with repeat-to-repeat CV variation (1000 draws). The full run is deterministic and takes
+{{RUNTIME}} s on a laptop CPU.</p>
+<table>
+<tr><th>Target</th><th>Prev.</th><th>ROC-AUC (95 % CI)</th><th>PR-AUC</th><th>Brier</th><th>ECE</th><th>Prec.*</th><th>Recall / Spec*</th><th>Acc*</th><th>F1*</th><th>MCC*</th><th>Acc · F1 @0.5</th></tr>
+{{RESULTS}}
+</table>
+<div class="note">* at the operating threshold selected by Youden's J in the inner CV (honest: chosen without the outer test fold).</div>
+
+<h3>Competing models, identical outer splits: mean ROC-AUC (Brier)</h3>
+<table>
+<tr><th>Model</th><th>Overall CAD</th><th>LAD</th><th>LCX</th><th>RCA</th><th>Coherent output†</th></tr>
+{{COMPARISON}}
+</table>
+<div class="note">† share of predictions with every P(vessel) ≤ P(CAD). Differences between models are within one standard deviation for most
+targets. AngioLens matches the best discrimination while giving the best or tied-best Brier score, exact explanations and 100 % coherence.</div>
+<figure><img src="figures/roc.png"><figcaption><b>Figure 2.</b> Out-of-fold ROC curves (repeat 1). AngioLens in orange, the four baselines in gray.</figcaption></figure>
+
+<figure><img src="figures/calibration_dca.png"><figcaption><b>Figure 3.</b> Left: reliability of out-of-fold probabilities (slope 1 = perfect).
+Right: decision-curve analysis for CAD. AngioLens gives higher net benefit than "refer everyone" across referral thresholds of roughly 10–90 %.</figcaption></figure>
+<div class="two">
+<div>
+<h3>Conformal prediction: does "90 % confident" hold out-of-sample?</h3>
+<table>
+<tr><th>Target</th><th>Coverage</th><th>Indeterminate</th><th>Acc. when decided</th><th>Cal. slope</th></tr>
+{{CONFORMAL}}
+</table>
+</div>
+<div>
+<h3>Reading the numbers honestly</h3>
+<p>Overall CAD is predicted well (AUC {{AUC_CAD}}). When the model commits, it is right {{ACCD_CAD}} of the time while abstaining on
+{{IND_CAD}} of patients. <b>Localising</b> the lesion from routine data is much harder: LAD is good (AUC {{AUC_LAD}}), LCX/RCA are moderate. The
+system says so, flagging {{IND_LCX}} / {{IND_RCA}} of LCX/RCA predictions as indeterminate rather than painting a confident heart. Published
+per-artery accuracies of 83–86 % on this dataset (Alizadehsani et al., 2020) were not obtained under nested validation, so they are not
+directly comparable.</p>
+</div>
+</div>
+
+<h2><span class="n">5</span>Clinical interpretability</h2>
+<ul>
+<li><b>Two-stage exact SHAP.</b> "Why CAD?" (stage 1) and "why this artery, given CAD?" (stage 2) waterfalls on a log-odds axis labelled in
+probability. Contributions sum exactly to the displayed probability. Clicking an artery in 3D switches the explanation to its stage.</li>
+<li><b>Physiological breakdown.</b> Every measurement with value, unit, reference-range bar, status (high / low / normal) and its signed
+contribution; totals per clinical domain (demographics, symptoms, ECG, labs, echo).</li>
+<li><b>Case-based evidence.</b> The five nearest cohort patients (distance weighted by global SHAP importance) with their angiography results.</li>
+<li><b>Counterfactual probes.</b> "If chest pain were atypical…" and sensitivity curves. These revealed <i>confounding by treatment</i>: setting
+LDL to 70 mg/dL <i>raises</i> modelled CAD risk for 64 % of patients, because LDL is no higher in CAD patients (104 vs 106 mg/dL; many are on
+statins). The UI flags such results as counter-intuitive associations, not treatment effects.</li>
+</ul>
+<figure><img src="figures/importance.png"><figcaption><b>Figure 4.</b> Global mean |SHAP| of the deployed model. Stage 1 is dominated by typical chest pain, age, wall-motion
+abnormality and ECG changes, which is clinically plausible. Stage-2 localisers are weak and partly lab-based, consistent with the moderate LCX/RCA performance.</figcaption></figure>
+
+<h2><span class="n">6</span>3D anatomical pipeline</h2>
+<div class="two">
+<div>
+<p><b>Source.</b> BodyParts3D 4.0 (DBCLS, CC BY 4.0), selected by FMA id: LAD tree (anterior interventricular branch + diagonals, conus and
+right-anterior branches, 18 meshes), circumflex (6), RCA tree (trunk, marginal, posterior descending, ventricular and conus branches, 29),
+left main, four chambers, cardiac veins, aorta, pulmonary trunk, SVC, lungs, rib cage, spine, clavicles and the torso skin.</p>
+<p><b>Epicardial correction.</b> BodyParts3D models ventricular <i>cavities</i>, so arteries floated 9 mm (LV) and 4 mm (RV) above the
+surface. We measured these gaps, subdivided and Taubin-smoothed the shells, and offset them along normals (7.5 / 3 mm). Arteries now sit
+1–2 mm from the epicardium.</p>
+<p><b>Baked attributes</b> (<code>scripts/build_anatomy.py</code>): for every artery vertex its distance downstream of the coronary ostium (found as
+the vertex nearest the aortic root), which drives the flow shader. For every ventricular vertex, soft perfusion-territory weights for LAD /
+LCX / RCA (softmin of distance to each artery tree, τ = 7 mm, proximity falloff), which drive the territory tint and region picking.
+Output: one GLB (4.9 MB, 194 k triangles) with named nodes, so model outputs map 1:1 to <code>LAD</code>, <code>LCX</code>, <code>RCA</code>.</p>
+</div>
+<div>
+<figure><img src="img/inspector.png"><figcaption><b>Figure 5.</b> Anterior view, LAD selected: the artery is emphasised, other vessels and bull's-eye segments dim,
+and the inspector lists its probability, conformal status, localising factors and angiography truth.</figcaption></figure>
+<p><b>Rendering</b> (React Three Fiber). Custom GLSL: arteries show contrast boluses travelling from ostium to apex that <i>slow down and flicker</i>
+as stenosis probability rises, plus an additive halo shell instead of a bloom pass. Myocardium uses per-vertex territory colouring. The torso and
+bones use a fresnel x-ray shader with a scan line. The heart beats at the patient's recorded pulse, in sync with a schematic ECG whose
+morphology reflects the recorded ST / T / Q / BBB / LVH findings. No post-processing and no float render targets: <b>60 fps at 1080p on Intel
+Iris Xe integrated graphics</b>, and it also runs on software WebGL.</p>
+</div>
+</div>
+
+<h2><span class="n">7</span>System integration &amp; extensibility</h2>
+<p>A FastAPI backend serves the pre-built React app and a typed REST API: <code>/api/predict</code> (prediction + exact SHAP for all four stages +
+similar patients, <b>41 ms</b> median), <code>/api/cohort/{id}</code> (honest out-of-fold replay), <code>/api/sensitivity</code> (11 ms),
+<code>/api/encode</code> (raw UCI rows / CSV / JSON import), <code>/api/copilot</code>, <code>/api/transcribe</code>, <code>/api/report</code>
+(PDF) and <code>/api/model-card</code>. Every slider move re-predicts (debounced 90 ms, in-flight requests aborted), so the arteries, territory
+tint, gauge, waterfall and ECG update in real time. Extending the system is local: a new <b>clinical feature</b> is one registry entry plus
+data; a new <b>model</b> is a <code>Stage</code> with <code>decision()</code> and <code>shap()</code>; a new <b>anatomical structure</b> is one
+FMA id in the build script and one node name in the viewer.</p>
+<p><b>Grounded copilot.</b> The LLM (Groq <code>gpt-oss-120b</code>) never predicts. It rephrases a deterministic fact sheet derived from the model output.
+Every number in its answer (Devanagari digits included) is checked against that sheet; on failure it is asked to rewrite once, then
+replaced by a template. Out-of-scope questions (dosing, targets) are declined. Without an API key everything works offline.</p>
+
+<h2><span class="n">8</span>Usage</h2>
+<p><code>pip install -r requirements.txt</code> → <code>python run.py</code> → open <code>http://127.0.0.1:8000</code>. The trained model,
+built anatomy and built web app ship in the repository. To reproduce from scratch: <code>python scripts/train.py</code> (nested CV, ~5 min),
+<code>python scripts/build_anatomy.py</code> (downloads BodyParts3D), <code>cd web &amp;&amp; npm ci &amp;&amp; npm run build</code>; tests:
+<code>pytest</code> (20 tests). Optional <code>.env</code> with <code>GROQ_API_KEY</code> enables the LLM and voice. Docker: <code>docker build -t angiolens . &amp;&amp; docker run -p 8000:8000 angiolens</code>.</p>
+
+<h2><span class="n">9</span>Limitations &amp; safety</h2>
+<div class="warn"><b>Decision-support and educational prototype, not a medical device.</b> The UI shows a persistent disclaimer bar, an
+acknowledgement dialog, conformal "indeterminate" states and disclaimers in every PDF and copilot answer.</div>
+<ul>
+<li>Single-centre, 303-patient cohort; no external validation. Performance will differ in other populations and referral settings.</li>
+<li>Vessel localisation is moderate (LCX/RCA AUC ≈ 0.71–0.74). The dataset contains no lesion location, severity grade or troponin.</li>
+<li>The 3D heart is a <b>generic</b> anatomy (right-dominant). Territory mapping follows standard AHA assignments, not this patient's coronary tree.</li>
+<li>SHAP and what-ifs describe model associations, which are confounded by treatment. They are not causal effects or treatment advice.</li>
+<li>The ECG strip is schematic. The copilot can only rephrase; it inherits every limitation above.</li>
+</ul>
+
+<h2><span class="n">10</span>References</h2>
+<ol class="refs">
+<li>Alizadehsani R, Roshanzamir M, Sani Z. Extension of Z-Alizadeh Sani dataset. UCI ML Repository, 2013. doi:10.24432/C5461K</li>
+<li>Alizadehsani R, et al. Model uncertainty quantification for diagnosis of each main coronary artery stenosis. <i>Soft Computing</i> 2020;24(13):10149–10160.</li>
+<li>Mitsuhashi N, et al. BodyParts3D: 3D structure database for anatomical concepts. <i>Nucleic Acids Res</i> 2009;37:D782–D785.</li>
+<li>Cerqueira MD, et al. Standardized myocardial segmentation and nomenclature for tomographic imaging of the heart. <i>Circulation</i> 2002;105:539–542.</li>
+<li>Lundberg SM, Lee S-I. A unified approach to interpreting model predictions. NeurIPS 2017; Lundberg SM, et al. TreeSHAP. <i>Nat Mach Intell</i> 2020.</li>
+<li>Vovk V, Gammerman A, Shafer G. <i>Algorithmic Learning in a Random World</i>. Springer 2005 (Mondrian conformal prediction).</li>
+<li>Vickers AJ, Elkin EB. Decision curve analysis. <i>Med Decis Making</i> 2006;26:565–574.</li>
+<li>Platt J. Probabilistic outputs for support vector machines. 1999; Ke G, et al. LightGBM. NeurIPS 2017.</li>
+</ol>
+</body>
+</html>

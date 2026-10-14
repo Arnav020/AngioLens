@@ -1,0 +1,5 @@
+web/node_modules
+data/cache
+.env
+**/__pycache__
+video/build

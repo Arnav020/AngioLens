@@ -1,0 +1,35 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="slides.css">
+<style>
+.wrap { position: absolute; left: 160px; top: 250px; right: 160px; }
+h1 { font: italic 400 220px/0.9 "Serif"; margin: 18px 0 0; letter-spacing: .005em; }
+h1 em { font-style: normal; color: var(--amber); }
+.sub { font: 400 46px/1.25 "Serif"; font-style: italic; color: var(--ink2); margin-top: 18px; }
+.tags { display: flex; gap: 16px; margin-top: 56px; }
+.tag { font: 500 22px "PlexMono"; padding: 10px 18px; border: 1px solid #24353d; border-radius: 999px; color: var(--ink2); background: rgba(8,14,17,.6); }
+.tag.a { color: var(--amber); border-color: #5b3c12; }
+svg.ecg { position: absolute; left: 0; right: 0; top: 720px; width: 1920px; height: 220px; }
+svg.ecg path { fill: none; stroke: var(--amber); stroke-width: 4; stroke-linecap: round; stroke-linejoin: round;
+  stroke-dasharray: 4200; stroke-dashoffset: 4200; animation: draw 3.6s .4s cubic-bezier(.45,.05,.3,1) forwards;
+  filter: drop-shadow(0 0 10px rgba(233,162,59,.6)); }
+@keyframes draw { to { stroke-dashoffset: 0; } }
+.foot { position: absolute; left: 160px; bottom: 70px; font: 400 20px "Plex"; color: var(--ink3); }
+</style></head>
+<body>
+<div class="wrap">
+  <div class="eyebrow fade d1">Multimodal AI Hackathon 2026 · Track A</div>
+  <h1 class="fade d2">Angio<em>Lens</em></h1>
+  <div class="sub fade d3">a virtual angiogram from routine clinical data</div>
+  <div class="tags fade d5">
+    <span class="tag a">Random Forest Rangers</span>
+    <span class="tag">CAD + LAD · LCX · RCA</span>
+    <span class="tag">exact SHAP</span>
+    <span class="tag">3D anatomy</span>
+    <span class="tag">conformal uncertainty</span>
+  </div>
+</div>
+<svg class="ecg" viewBox="0 0 1920 220" preserveAspectRatio="none">
+  <path d="M0 130 H520 l18 -10 18 10 H600 l14 22 22 -128 24 150 16 -44 H760 q30 -36 60 0 H1180 l18 -10 18 10 H1278 l14 22 22 -128 24 150 16 -44 H1438 q30 -36 60 0 H1920"/>
+</svg>
+<div class="foot fade d6">Decision-support and educational prototype · not a diagnosis</div>
+</body></html>

@@ -1,0 +1,5 @@
+heart.glb is derived from BodyParts3D 4.0.
+Attribution: "BodyParts3D, © The Database Center for Life Science licensed under CC Attribution 4.0 International".
+Licence: https://creativecommons.org/licenses/by/4.0/
+Modifications: mesh selection by FMA id, merging, decimation, ventricular epicardial offset,
+baked per-vertex flow/territory attributes (scripts/build_anatomy.py).

@@ -1,0 +1,27 @@
+@font-face { font-family: "Plex"; src: url("../../docs/fonts/ibm-plex-sans-latin-400-normal.woff2"); font-weight: 400; }
+@font-face { font-family: "Plex"; src: url("../../docs/fonts/ibm-plex-sans-latin-500-normal.woff2"); font-weight: 500; }
+@font-face { font-family: "Plex"; src: url("../../docs/fonts/ibm-plex-sans-latin-600-normal.woff2"); font-weight: 600; }
+@font-face { font-family: "PlexMono"; src: url("../../docs/fonts/ibm-plex-mono-latin-400-normal.woff2"); font-weight: 400; }
+@font-face { font-family: "PlexMono"; src: url("../../docs/fonts/ibm-plex-mono-latin-500-normal.woff2"); font-weight: 500; }
+@font-face { font-family: "Serif"; src: url("../../docs/fonts/instrument-serif-latin-400-normal.woff2"); font-style: normal; }
+@font-face { font-family: "Serif"; src: url("../../docs/fonts/instrument-serif-latin-400-italic.woff2"); font-style: italic; }
+
+:root { --bg: #05080a; --ink: #e6edef; --ink2: #a7b5ba; --ink3: #6c7d84; --line: #1c2a31; --amber: #e9a23b; --teal: #2a9d8f; --crimson: #c81d25; --phos: #43f3a5; }
+* { box-sizing: border-box; }
+html, body { margin: 0; width: 1920px; height: 1080px; overflow: hidden; background: var(--bg); color: var(--ink); font-family: "Plex", sans-serif; }
+body {
+  background:
+    radial-gradient(1400px 800px at 50% 45%, #0d1d22 0%, #071014 45%, #04070a 100%);
+}
+body::before {
+  content: ""; position: fixed; inset: 0; opacity: .55; pointer-events: none;
+  background-image: radial-gradient(rgba(120,170,180,.10) 1.4px, transparent 1.4px); background-size: 30px 30px;
+  mask-image: radial-gradient(closest-side, black 40%, transparent 100%);
+}
+.eyebrow { font: 500 20px "PlexMono"; letter-spacing: .22em; text-transform: uppercase; color: var(--ink3); }
+.serif { font-family: "Serif"; }
+.fade { opacity: 0; transform: translateY(14px); animation: in .9s cubic-bezier(.2,.7,.2,1) forwards; }
+@keyframes in { to { opacity: 1; transform: none; } }
+.d1 { animation-delay: .2s } .d2 { animation-delay: .6s } .d3 { animation-delay: 1.0s } .d4 { animation-delay: 1.4s }
+.d5 { animation-delay: 1.8s } .d6 { animation-delay: 2.2s } .d7 { animation-delay: 2.6s } .d8 { animation-delay: 3.0s }
+.d9 { animation-delay: 3.6s } .d10 { animation-delay: 4.4s } .d11 { animation-delay: 5.2s } .d12 { animation-delay: 6.0s }

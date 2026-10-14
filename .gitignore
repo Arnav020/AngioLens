@@ -1,0 +1,27 @@
+# secrets
+.env
+
+# python
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+venv/
+
+# node
+web/node_modules/
+
+# large downloaded sources (re-fetched by scripts/build_anatomy.py)
+data/cache/
+
+# video build intermediates
+video/build/
+
+# os / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# rendered demo video (uploaded to YouTube; subtitles .srt are kept)
+video/out/*.mp4
