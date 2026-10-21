@@ -9,7 +9,7 @@ A virtual angiogram: predicts CAD and LAD/LCX/RCA stenosis from routine clinical
 
 **Team:** Random Forest Rangers (solo): Arnav Joshi
 
-**Links:** Live demo https://angiolens.onrender.com/ · GitHub https://github.com/Arnav020/AngioLens · Demo video https://youtu.be/R_DU726G0Zs
+**Links:** Live demo https://angiolens-6rx9.onrender.com/ · GitHub https://github.com/Arnav020/AngioLens · Demo video https://youtu.be/R_DU726G0Zs
 
 **Built with:** python · scikit-learn · lightgbm · shap · fastapi · react · typescript · three.js · react-three-fiber · glsl · bodyparts3d · conformal-prediction · groq · whisper · reportlab · playwright · ffmpeg · edge-tts
 

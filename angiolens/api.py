@@ -163,7 +163,7 @@ if DIST.exists():
     if (DIST / "anatomy").exists():
         app.mount("/anatomy", StaticFiles(directory=DIST / "anatomy"), name="anatomy")
 
-    @app.get("/{path:path}", include_in_schema=False)
+    @app.api_route("/{path:path}", methods=["GET", "HEAD"], include_in_schema=False)
     def spa(path: str):
         f = (DIST / path).resolve()
         if path and f.is_file() and DIST.resolve() in f.parents:
